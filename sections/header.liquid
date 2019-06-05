@@ -73,7 +73,7 @@
     <div class="site-header-sections">
 
         <!-- new desktop navigation -->
-        <div class="navigation__desktop small--hide">
+        <div class="navigation__desktop hide">
             <ul class="navigation__links">
               {% for link in linklists[section.settings.primary_navigation].links%}
                 {% assign child_list_handle = link.title | handleize %}
@@ -121,10 +121,7 @@
         </div>
         <!-- END new desktop navigation -->
 
-
-      <nav class="site-header__section site-header__section--button medium-up--hide"
-        data-site-navigation role="navigation"
-      >
+        <nav class="site-header__section site-header__section--button" data-site-navigation role="navigation">
         <button class="site-header__navigation btn btn--clear btn--square"
           aria-expanded="false"
           data-navigation-button
@@ -221,7 +218,7 @@
           </div>
         </div>
       </nav>
-      <div class="site-header__section site-header__section--title">
+        <div class="site-header__section site-header__section--title">
         {% comment %}
         Use the uploaded logo from theme settings if enabled.
         Site name gets precedence with `h1` tag on homepage, div on other pages.
@@ -265,7 +262,7 @@
           </div>
         {% endif %}
       </div>
-      <div class="navigation__desktop--right small--hide">
+        <div class="navigation__desktop--right hide">
 
         {% comment %}
             <div class="site-header__section site-header__section--button">
