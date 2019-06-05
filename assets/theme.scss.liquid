@@ -1727,12 +1727,12 @@ a[href^="tel"] {
 
   &:not(.disabled):hover::after {
     // outline: 4px solid $color-primary;
-    box-shadow: 0 0 0px 4px $color-button;
+    // box-shadow: 0 0 0px 4px $color-button;
   }
 
   &:not(.disabled):active::after {
     // outline: 0 solid $color-primary;
-    box-shadow: 0 0 0px 4px $color-button;
+    // box-shadow: 0 0 0px 4px $color-button;
   }
 
   &[disabled],
@@ -4746,6 +4746,28 @@ $image-bar-placeholder-border-color: rgba($color-body-text, 0.25);
   }
 }
 
+// desktop navigation
+.navigation__desktop,
+.site-header-sections .site-header__section--title,
+.navigation__desktop--right {
+    @include media-query($medium-up) {
+        width: 33.333%
+    }
+}
+
+.navigation__desktop--right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+// desktop navigation
+.site-header-sections .site-header__section.site-header__section--button {
+    @include media-query($medium-up) {
+        width: 33.333%;
+        text-align: right;
+    }
+}
+
 /*================ Navigation Links ================*/
 .navigation__links {
   list-style: none;
@@ -4753,7 +4775,8 @@ $image-bar-placeholder-border-color: rgba($color-body-text, 0.25);
   margin: 0 0 $gutter;
 
   @include media-query($medium-up) {
-    margin-bottom: $gutter * 3;
+      display: flex;
+        margin: 0;
   }
 }
 
@@ -4768,11 +4791,11 @@ $image-bar-placeholder-border-color: rgba($color-body-text, 0.25);
     color: $color-heading-text;
     padding: 0 ($gutter / 2);
     text-decoration: none;
-    text-transform: uppercase;
+    text-transform: capitalize;
     opacity: 1;
 
     @include media-query($medium-up) {
-      font-size: rem(20);
+      font-size: rem(13);
       line-height: line-height(48, 20);
       font-weight: $font-weight-bold;
     }
@@ -6488,6 +6511,10 @@ $site-header-wrapper-color: rgba($color-header, 0);
 .site-header-sections {
   @include display-flexbox;
   @include align-items(center);
+
+  @include media-query($medium-up) {
+      padding: 0 5.5rem;
+  }
 }
 
 

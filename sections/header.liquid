@@ -70,8 +70,59 @@
       {% endif %}
     {% endif %}
 
-    <div class="site-header-sections page-width">
-      <nav class="site-header__section site-header__section--button"
+    <div class="site-header-sections">
+
+        <!-- new desktop navigation -->
+        <div class="navigation__desktop small--hide">
+            <ul class="navigation__links">
+              {% for link in linklists[section.settings.primary_navigation].links%}
+                {% assign child_list_handle = link.title | handleize %}
+                {% if link.links != blank %}
+                  <li class="navigation__link navigation__has-sublinks navigation__has-sublinks--collapsed">
+                    <button class="navigation__expand-sublinks" aria-expanded="{% if link.active %}true{% else %}false{% endif %}">
+                      <span aria-hidden="true">{{ link.title }}</span>
+                      <span class="visually-hidden">{{ 'general.navigation.toggle_sublinks' | t: link_title: link.title }}</span>
+                      {% include 'icon-arrow-down' %}
+                    </button>
+                    <div class="navigation__sublinks-container">
+                      <ul class="navigation__sublinks">
+                        {% for childlink in link.links %}
+                          <li class="navigation__sublink{% if childlink.links != blank %} navigation__has-sublinks navigation__has-sublinks--collapsed{% endif %}">
+                            {% if childlink.links != blank %}
+                              <button class="navigation__expand-sublinks navigation__expand-sublinks--third-level" aria-expanded="{% if link.active %}true{% else %}false{% endif %}">
+                                <span aria-hidden="true">{{ childlink.title }}</span>
+                                <span class="visually-hidden">{{ 'general.navigation.toggle_sublinks' | t: link_title: childlink.title }}</span>
+                                {% include 'icon-arrow-down' %}
+                              </button>
+                              <div class="navigation__sublinks-container">
+                                <ul class="navigation__sublinks navigation__sublinks--third-level">
+                                  {% for grandchildlink in childlink.links %}
+                                    <li class="navigation__sublink--third-level">
+                                      <a href="{{ grandchildlink.url }}"{% if grandchildlink.active %} aria-current="page"{% endif %}>{{ grandchildlink.title | escape }}</a>
+                                    </li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                            {% else %}
+                              <a href="{{ childlink.url }}"{% if childlink.active %} aria-current="page"{% endif %}>{{ childlink.title | escape }}</a>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </li>
+                {% else %}
+                  <li class="navigation__link {% if link.active %} navigation__link--active{% endif %}">
+                    <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+        </div>
+        <!-- END new desktop navigation -->
+
+
+      <nav class="site-header__section site-header__section--button medium-up--hide"
         data-site-navigation role="navigation"
       >
         <button class="site-header__navigation btn btn--clear btn--square"
@@ -214,13 +265,64 @@
           </div>
         {% endif %}
       </div>
-      <div class="site-header__section site-header__section--button">
-        <a href="/cart" class="btn btn--clear btn--square btn--hover-scale site-header__cart ajax-cart__toggle" aria-expanded="false">
-          {%- assign icon = 'icon-header-' | append: section.settings.icon %}
-          {% include icon %}
-          <span class="icon__fallback-text">{{ 'general.header.view_cart' | t }}</span>
-          <span class="site-header__cart-bubble{% if cart.item_count > 0 %} site-header__cart-bubble--visible{% endif %}"></span>
-        </a>
+      <div class="navigation__desktop--right small--hide">
+
+        {% comment %}
+            <div class="site-header__section site-header__section--button">
+                <a href="/cart" class="btn btn--clear btn--square btn--hover-scale site-header__cart ajax-cart__toggle" aria-expanded="false">
+                  {%- assign icon = 'icon-header-' | append: section.settings.icon %}
+                  {% include icon %}
+                  <span class="icon__fallback-text">{{ 'general.header.view_cart' | t }}</span>
+                  <span class="site-header__cart-bubble{% if cart.item_count > 0 %} site-header__cart-bubble--visible{% endif %}"></span>
+                </a>
+            </div>
+        {% endcomment %}
+
+        <ul class="navigation__links">
+          {% for link in linklists[section.settings.right_navigation].links%}
+            {% assign child_list_handle = link.title | handleize %}
+            {% if link.links != blank %}
+              <li class="navigation__link navigation__has-sublinks navigation__has-sublinks--collapsed">
+                <button class="navigation__expand-sublinks" aria-expanded="{% if link.active %}true{% else %}false{% endif %}">
+                  <span aria-hidden="true">{{ link.title }}</span>
+                  <span class="visually-hidden">{{ 'general.navigation.toggle_sublinks' | t: link_title: link.title }}</span>
+                  {% include 'icon-arrow-down' %}
+                </button>
+                <div class="navigation__sublinks-container">
+                  <ul class="navigation__sublinks">
+                    {% for childlink in link.links %}
+                      <li class="navigation__sublink{% if childlink.links != blank %} navigation__has-sublinks navigation__has-sublinks--collapsed{% endif %}">
+                        {% if childlink.links != blank %}
+                          <button class="navigation__expand-sublinks navigation__expand-sublinks--third-level" aria-expanded="{% if link.active %}true{% else %}false{% endif %}">
+                            <span aria-hidden="true">{{ childlink.title }}</span>
+                            <span class="visually-hidden">{{ 'general.navigation.toggle_sublinks' | t: link_title: childlink.title }}</span>
+                            {% include 'icon-arrow-down' %}
+                          </button>
+                          <div class="navigation__sublinks-container">
+                            <ul class="navigation__sublinks navigation__sublinks--third-level">
+                              {% for grandchildlink in childlink.links %}
+                                <li class="navigation__sublink--third-level">
+                                  <a href="{{ grandchildlink.url }}"{% if grandchildlink.active %} aria-current="page"{% endif %}>{{ grandchildlink.title | escape }}</a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </div>
+                        {% else %}
+                          <a href="{{ childlink.url }}"{% if childlink.active %} aria-current="page"{% endif %}>{{ childlink.title | escape }}</a>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </li>
+            {% else %}
+              <li class="navigation__link {% if link.active %} navigation__link--active{% endif %}">
+                <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+
       </div>
     </div>
   </header>
@@ -440,6 +542,23 @@
         "pt-BR": "Navegação primária",
         "zh-CN": "主网站地图",
         "zh-TW": "主要導覽"
+      },
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "right_navigation",
+      "label": {
+        "de": "Right Navigation",
+        "en": "Right navigation",
+        "es": "Navegación Right",
+        "fr": "Navigation Right",
+        "it": "Navigazione Right",
+        "ja": "プライマリメニュー Right",
+        "nl": "Right navigatie",
+        "pt-BR": "Navegação Right",
+        "zh-CN": "主网站地图 Right",
+        "zh-TW": "主要導覽 Right"
       },
       "default": "main-menu"
     },
