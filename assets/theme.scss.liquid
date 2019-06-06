@@ -1,7 +1,33 @@
+// Table of Contents
+
+// 49. Mixins
+// 368. Grid Breakpoints
+// 1231. Grid
+// 1283. Grid Columns
+// 4021. Footer
+// 4231. Footer Bottom
+
+// dev helpers
+.red {
+    background: red;
+    height: 20px;
+    padding: 1rem;
+}
+.blue {
+    background: blue;
+    height: 20px;
+    padding: 1rem;
+}
+
 /*============================================================================
   [replace with theme name] | Built with Slate
     - You cannot use native CSS/Sass @imports in this file without a build script
 ==============================================================================*/
+
+// hide the dumb admin bar!!!
+iframe#preview-bar-iframe {
+    display: none !important;
+}
 
 /*================ TOOLS ================*/
 /*============================================================================
@@ -20,7 +46,9 @@
   @return ($font-size / 10) + rem;
 }
 
-/*================ Mixins ================*/
+/*================
+// 49. Mixins
+================*/
 @mixin clearfix() {
   &::after {
     content: '';
@@ -51,6 +79,10 @@
   margin: 0;
 }
 
+@mixin border-top-section($padding-top) {
+    border-top: 1px solid black;
+    padding-top: $padding-top;
+}
 /*============================================================================
   Flexbox prefix mixins from Bourbon
     https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/css3/_flex-box.scss
@@ -356,7 +388,7 @@ $settings-font-style-body: {{ base_font.style }};
 $settings-font-size-base: {{ settings.type_base_size }};
 
 /*============================================================================
-  Grid Breakpoints and Class Names
+  368. Grid Breakpoints and Class Names
     - Do not change the variable names
 ==============================================================================*/
 $grid-medium: 750px;
@@ -455,7 +487,7 @@ $color-drawer-overlay: #4a4a4a;
 $dropdown-background: $settings-color-form-elements;
 
 /*================ Sizing Variables ================*/
-$width-site: 980px;
+$width-site: 1140px;
 $gutter: 20px;
 
 // Gift card
@@ -574,7 +606,7 @@ em {
 
 
 small {
-  font-size: 80%;
+  font-size: 57%;
 }
 
 sub,
@@ -1057,7 +1089,7 @@ input[type='search'],
 input[type='number'],
 textarea,
 select {
-  font-size: rem(14);
+  font-size: rem(17);
   line-height: line-height(24, 14);
   width: 100%;
   margin-bottom: $gutter;
@@ -1141,7 +1173,7 @@ select::-ms-expand {
 
 .input-group--underline {
   @extend .input-group;
-  border-bottom: 2px solid $color-body-text;
+  border-bottom: 1px solid $color-body-text;
 
   input[type='text'],
   input[type='email'],
@@ -1218,7 +1250,7 @@ fieldset {
 }
 
 /*============================================================================
-  Grid
+// 1231. Grid
     - Based on CSS Wizardry grid
 ==============================================================================*/
 
@@ -1270,7 +1302,7 @@ fieldset {
 }
 
 /*============================================================================
-  Grid Columns
+  1283. Grid Columns
     - Create width classes, prepended by the breakpoint name.
 ==============================================================================*/
 // sass-lint:disable brace-style empty-line-between-blocks
@@ -4007,8 +4039,8 @@ html {
   }
 }
 
+// 4021. Footer
 .site-footer {
-  text-align: center;
   background-color: $color-footer-bg;
   color: $color-footer-text;
   padding: ($gutter * 2) 0;
@@ -4038,9 +4070,27 @@ html {
     }
   }
 
+    .input-group--underline input[type='email'] {
+        padding-left: 0;
+    }
   .icon {
     fill: $color-footer-text;
   }
+
+  .newsletter {
+      @include media-query(medium-up) {
+          justify-content: flex-start;
+          padding: 0;
+      }
+  }
+    .footer-logo {
+        margin: 2rem auto;
+
+        @include media-query(medium-up) {
+            text-align: left;
+            margin: 0;
+        }
+    }
 }
 
 .site-footer--parallax {
@@ -4077,6 +4127,7 @@ html {
   @include media-query($medium-up) {
     padding-bottom: $gutter * 2;
   }
+
 }
 
 .flex-footer__item {
@@ -4101,11 +4152,27 @@ html {
       @include flex(1 0 100%);
     }
   }
+
+  .half {
+      width: 50%;
+  }
+}
+
+.flex-footer__item--one-quarter {
+  @include media-query($medium-up) {
+    flex: 0 0 25%;
+  }
 }
 
 .flex-footer__item--one-third {
   @include media-query($medium-up) {
     flex: 0 0 33%;
+  }
+}
+
+.flex-footer__item--half {
+  @include media-query($medium-up) {
+    flex: 0 0 50%;
   }
 }
 
@@ -4134,27 +4201,15 @@ html {
   }
 }
 
-.site-footer__linklist-item {
-  display: inline-block;
-  padding: 0 ($gutter / 2);
-  margin-bottom: $gutter / 2;
-  font-size: rem(12);
-  font-weight: $font-weight-bold;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-
-  @include media-query($medium-up) {
-    display: block;
-    padding: 0 20px 0 0;
-
-    .flex-footer--full & {
-      display: inline-block;
-      padding: 5px 10px;
-    }
-  }
-}
-
 .site-footer__newsletter {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+
+    @include media-query(medium-up) {
+        margin: unset;
+    }
+
   .input-group__btn {
     text-align: right;
     opacity: 1;
@@ -4168,9 +4223,6 @@ html {
     color: $color-footer-text;
   }
 
-  @include media-query($small) {
-    margin: 0 $gutter;
-  }
 }
 
 .site-footer__newsletter-label {
@@ -4186,7 +4238,7 @@ html {
 }
 
 .site-footer__newsletter-subheading {
-  font-size: rem(14);
+  font-size: rem(13);
   margin-bottom: rem(20);
   @include media-query($medium-up) {
     text-align: left;
@@ -4201,20 +4253,77 @@ html {
   }
 }
 
+.site-footer__linklist-item {
+  display: inline-block;
+  padding: 0 ($gutter / 2);
+  margin-bottom: $gutter / 2;
+  font-size: rem(12);
+  font-weight: $font-weight-bold;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+
+  @include media-query($medium-up) {
+    display: block;
+    padding: 0 20px 0 0;
+
+    .flex-footer--full & {
+      display: inline-block;
+      padding: 5px 10px;
+    }
+  }
+}
+
 .site-footer__bottom {
   @include display-flexbox;
-  @include align-items(center);
+  @include align-items(flex-start);
   @include justify-content(space-between);
   @include flex-wrap(wrap);
   @include flex-direction(column);
 
   @include media-query($medium-up) {
     @include flex-direction(row);
+
   }
 }
 
+// 4231. Footer Bottom
 .site-footer__bottom--center {
-  @include justify-content(center);
+  @include justify-content(space-between);
+  @include border-top-section(2em);
+  text-align: left;
+
+    // copyright section
+    .site-footer__copyright {
+        ul {
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+
+            @include media-query(medium-up) {
+                flex-direction: row;
+                margin: 0;
+                justify-content: space-between;
+            }
+
+          li {
+              margin: 5px;
+
+              @include media-query(medium) {
+                  margin: 0 10px;
+              }
+          }
+      }
+    }
+
+    // advise section
+    .site-footer__advise {
+        .fda {
+            border: 1px solid $color-footer-text;
+            padding: 1rem;
+            line-height: 1;
+        }
+    }
 }
 
 .site-footer__social-icons {

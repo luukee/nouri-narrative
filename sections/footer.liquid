@@ -24,64 +24,108 @@
 
 <footer class="site-footer" role="contentinfo" data-section-type="footer" data-section-id="{{ section.id }}" {% if section.settings.enable_parallax %}data-footer-parallax{% endif %} data-section-id="{{ section.id }}" data-section-type="footer">
   <div class="page-width">
-    {% if menu_enabled or section.settings.show_newsletter %}
-      <div class="flex-footer{% unless section.settings.show_newsletter %} flex-footer--full text-center{% endunless %}">
-        {% for block in section.blocks %}
-          <div class="flex-footer__item flex-footer__item--{{ block.type }}" {{ block.shopify_attributes }}>
-            {% case block.type %}
-            {% when 'menu' %}
-              {%- assign link_list = block.settings.link_list -%}
-              <ul class="site-footer__linklist">
-                {% for link in linklists[link_list].links %}
-                  <li class="site-footer__linklist-item h6">
-                    <a href="{{ link.url }}">{{ link.title }}</a>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endcase %}
-          </div>
-        {% endfor %}
 
-        {% if section.settings.show_newsletter %}
-          <div class="flex-footer__item flex-footer__item--newsletter">
-            <div class="site-footer__newsletter">
-              {% form 'customer' %}
-                <input type="hidden" name="contact[tags]" value="newsletter">
-                <label for="NewsletterEmail" class="site-footer__newsletter-label">{{ section.settings.newsletter_heading }}</label>
-                <div class="site-footer__newsletter-subheading">{{ section.settings.newsletter_subheading }}</div>
-                <div class="input-group--underline">
-                  <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_placeholder' | t }}" name="contact[email]" id="NewsletterEmail" class="input-group__field site-footer__newsletter-input" aria-label="{{ 'general.newsletter_form.newsletter_placeholder' | t }}" autocorrect="off" autocapitalize="off">
-                  <div class="input-group__btn input-group__btn--newsletter">
-                    <button type="submit" class="btn--newsletter__submit">
-                      {{ 'general.newsletter_form.submit' | t }}
-                      {% include 'icon-arrow-right' %}
-                    </button>
-                  </div>
+    {% if menu_enabled or section.settings.show_newsletter %}
+        <div class="flex-footer{% unless section.settings.show_newsletter %} flex-footer--full text-center{% endunless %}">
+
+
+            <!-- top footer -->
+            {% if section.settings.show_newsletter %}
+            <div class="flex-footer__item site-footer__bottom newsletter">
+
+                <!-- footer logo -->
+                {% if section.settings.footer_logo %}
+                <div class="flex-footer__item--one-quarter footer-logo">
+                    <img src="{{ section.settings.footer_logo | img_url: 'master' }}" alt="{{ section.settings.footer_logo | escape }}">
                 </div>
-                <div class="site-footer__newsletter-message" aria-role="alert">
-                  {% if form.posted_successfully? %}
-                    <p class="form-success" aria-role="alert">{{ 'general.newsletter_form.confirmation' | t }}</p>
-                  {% endif %}
-                  {{ form.errors | default_errors }}</div>
-              {% endform %}
+                {% endif %}
+
+                <!-- footer newsletter -->
+                <div class="site-footer__newsletter">
+                  {% form 'customer' %}
+                    <input type="hidden" name="contact[tags]" value="newsletter">
+                    <!-- <label for="NewsletterEmail" class="site-footer__newsletter-label">{{ section.settings.newsletter_heading }}</label> -->
+                    <div class="site-footer__newsletter-subheading">{{ section.settings.newsletter_subheading }}</div>
+                    <div class="input-group--underline">
+                      <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_placeholder' | t }}" name="contact[email]" id="NewsletterEmail" class="input-group__field site-footer__newsletter-input" aria-label="{{ 'general.newsletter_form.newsletter_placeholder' | t }}" autocorrect="off" autocapitalize="off">
+                      <div class="input-group__btn input-group__btn--newsletter">
+                        <!-- <button type="submit" class="btn--newsletter__submit">
+                          {{ 'general.newsletter_form.submit' | t }}
+                          {% include 'icon-arrow-right' %}
+                        </button> -->
+                      </div>
+                    </div>
+                    <div class="site-footer__newsletter-message" aria-role="alert">
+                      {% if form.posted_successfully? %}
+                        <p class="form-success" aria-role="alert">{{ 'general.newsletter_form.confirmation' | t }}</p>
+                      {% endif %}
+                      {{ form.errors | default_errors }}</div>
+                  {% endform %}
+                </div>
+              </div>
+            {% endif %}
+
+            <!-- bottom footer -->
+            <div class="flex-footer__item--one-third site-footer__bottom flex-footer__item">
+                <!-- footer menu -->
+                {% for block in section.blocks %}
+                    <div class="flex-footer__item--half flex-footer__item--{{ block.type }}" {{ block.shopify_attributes }}>
+                      {% case block.type %}
+                      {% when 'menu' %}
+                        {%- assign link_list = block.settings.link_list -%}
+                        <ul class="site-footer__linklist">
+                          {% for link in linklists[link_list].links %}
+                            <li class="site-footer__linklist-item h6">
+                              <a href="{{ link.url }}">{{ link.title }}</a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      {% endcase %}
+                    </div>
+                {% endfor %}
+
             </div>
-          </div>
-        {% endif %}
+
       </div>
     {% endif %}
 
+    <!-- secondary footer -->
     <div class="site-footer__bottom{% unless section.settings.show_social_icons or section.settings.show_payment_icons %} site-footer__bottom--center{% endunless %}">
-      {% if section.settings.show_social_icons %}
-        <div class="site-footer__social-icons flex-footer__item--one-third">
-          {% include 'social-links', disableTab: true, largeIcons: false %}
-        </div>
-      {% endif %}
 
-      <div class="site-footer__copyright flex-footer__item--one-third">
-        <small>{{ 'layout.footer.copyright' | t }} &copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: '/' }}.</small>
-        <small class="site-footer__powered-by">{{ powered_by_link }}</small>
+        {% comment %}
+            {% if section.settings.show_social_icons %}
+            <div class="site-footer__social-icons flex-footer__item--one-third">
+              {% include 'social-links', disableTab: true, largeIcons: false %}
+            </div>
+            {% endif %}
+        {% endcomment %}
+
+      <!-- copyright -->
+      <div class="site-footer__copyright">
+
+          <ul>
+              <li>
+                  <small>Privacy Policy</small>
+              </li>
+              <li>
+                  <small>Terms of Service</small>
+              </li>
+              <li>
+                  <small> &copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: '/' }}, LLC. All rights reserved.</small>
+              </li>
+          </ul>
+
+        <!-- <small class="site-footer__powered-by">{{ powered_by_link }}</small> -->
       </div>
 
+      <!-- copyright -->
+      <div class="site-footer__advise flex-footer__item--one-third">
+          <div class="fda">
+              <small>* These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</small>
+          </div>
+      </div>
+
+      {% comment %}
       {%- if section.settings.show_payment_icons -%}
         <div class="site-footer__payment-icons flex-footer__item--one-third">
           {%- unless shop.enabled_payment_types == empty -%}
@@ -96,6 +140,8 @@
           {%- endunless -%}
         </div>
       {%- endif -%}
+      {% endcomment %}
+
     </div>
   </div>
 
@@ -193,6 +239,22 @@
         "zh-TW": "啟用頁尾捲動視差效果"
       },
       "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": {
+        "de": "Footer Foto",
+        "en": "Footer Image",
+        "es": "Footer Imagen",
+        "fr": "Footer Image",
+        "it": "Footer Immagine",
+        "ja": "Footer 画像",
+        "nl": "Footer Afbeelding",
+        "pt-BR": "Footer Imagem",
+        "zh-CN": "Footer 图片",
+        "zh-TW": "Footer 圖片"
+      }
     },
     {
       "type": "header",
